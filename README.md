@@ -35,7 +35,7 @@ ai_poet/
 ### 1. Clone & Setup
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Shuaib11-Github/AI_Poet_Article_with_Caching.git
 cd your_project
 python -m venv .venv
 source .venv/bin/activate    # On Windows: .venv\Scripts\activate
