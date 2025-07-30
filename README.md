@@ -15,6 +15,7 @@ A Streamlit web application for generating poems and articles about any topic, u
 
 ## Project Structure
 
+```bash
 ai_poet/
 │
 ├── ai_poet/                 # Your python package
@@ -26,9 +27,10 @@ ai_poet/
 │   └── config.py
 ├── requirements.txt         # All required python libs, see below
 ├── .env.example             # Shows required env vars
-├── ai_poet_app.py           # The Streamlit app frontend
+├── app.py           # The Streamlit app frontend
 ├── Dockerfile
 └── README.md
+```
 
 ## Local Installation
 
