@@ -15,6 +15,7 @@ A Streamlit web application for generating poems and articles about any topic, u
 
 ## Project Structure
 
+```bash
 ai_poet/
 │
 ├── ai_poet/                 # Your python package
@@ -29,13 +30,14 @@ ai_poet/
 ├── app.py           # The Streamlit app frontend
 ├── Dockerfile
 └── README.md
+```
 
 ## Local Installation
 
 ### 1. Clone & Setup
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Shuaib11-Github/AI_Poet_Article_with_Caching.git
 cd your_project
 python -m venv .venv
 source .venv/bin/activate    # On Windows: .venv\Scripts\activate
