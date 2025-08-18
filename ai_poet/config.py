@@ -9,19 +9,18 @@ from dotenv import load_dotenv
 import pydantic
 from packaging.version import parse as vparse
 
-# ---------------------------------------------------------------------------
-# Pydantic v1  → BaseSettings & validator live in pydantic
-# Pydantic v2  → BaseSettings lives in pydantic_settings, validator renamed
-# ---------------------------------------------------------------------------
+# -----------------------------------------------------------------------
+# Handle Pydantic v1 vs v2 differences
+# -----------------------------------------------------------------------
 if vparse(pydantic.__version__).major >= 2:
-    from pydantic_settings import BaseSettings          # type: ignore
-    from pydantic import Field, field_validator as _validator
+    from pydantic_settings import BaseSettings
+    from pydantic import Field, field_validator as validator
 else:
-    from pydantic import BaseSettings, Field, validator as _validator  # type: ignore
+    from pydantic import BaseSettings, Field, validator  # type: ignore
 
+# Load .env file
 dotenv_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path)
-
 
 class Settings(BaseSettings):
     """Central configuration object (env-driven)."""
@@ -32,25 +31,28 @@ class Settings(BaseSettings):
     max_tokens: int = 1000
     temperature: float = 0.7
     enable_cache: bool = True
-    # cache_path: Path = Path.home() / ".ai_poet_cache.sqlite"
     redis_host: str = 'localhost'
     redis_port: int = 6379
     redis_db: int = 0
-    redis_password: str | None = None
+    redis_password: Optional[str] = None
 
-    @_validator("api_key", mode="before")   # v1 ignores `mode`
-    def key_must_exist(cls, v: Optional[str]):  # noqa: N805
-        if not v:
-            raise ValueError(
-                "API_KEY missing. Add it to .env or export it."
-            )
-        return v
+    # Validator — defined inline to avoid type resolution issues
+    @validator("api_key", mode="before" if vparse(pydantic.__version__).major >= 2 else ...)
+    def key_must_exist(cls, v: Optional[str]):
+        if not v or not v.strip():
+            raise ValueError("API_KEY missing. Add it to .env or export it.")
+        return v.strip()
 
     class Config:
-        env_file = dotenv_path
+        env_file = dotenv_path if dotenv_path.exists() else None
         env_file_encoding = "utf-8"
-
+        # For v2, extra settings
+        model_config = {} if vparse(pydantic.__version__).major < 2 else {
+            "extra": "allow",
+            "env_file": env_file,
+            "env_file_encoding": "utf-8",
+        }
 
 @lru_cache
 def get_settings() -> Settings:
-    return Settings()      # singleton
+    return Settings()

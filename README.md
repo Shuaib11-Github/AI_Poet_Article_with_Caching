@@ -26,7 +26,7 @@ ai_poet/
 │   └── config.py
 ├── requirements.txt         # All required python libs, see below
 ├── .env.example             # Shows required env vars
-├── ai_poet_app.py           # The Streamlit app frontend
+├── app.py           # The Streamlit app frontend
 ├── Dockerfile
 └── README.md
 
@@ -160,5 +160,16 @@ Pull requests are welcome! For major changes, please open an issue first to disc
 ## License
 
 This project is licensed under the MIT License.    
+
+
+# Install Jupyter Kernel on uv
+```bash
+python -m ipykernel install --user --name=langgraph-workflows --display-name "langgraph-workflows"
+```
+
+# Run Jupyter Notebook
+```bash
+jupyter notebook
+```
 
 
